@@ -5,6 +5,7 @@ const slideButtonPrev = document.querySelector(".slide_btn_prev");
 const slideButtonNext = document.querySelector(".slide_btn_next");
 const slidePagination = document.querySelector(".slide_pagination");
 const slideLength = slideContents.length;
+const pageDots;
 const contentWidth = 400;
 const contentHeight = 400;
 const slideSpeed = 300;
