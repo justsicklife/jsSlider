@@ -1,86 +1,107 @@
-const slideBox = document.querySelector(".slide_box") ;
 const slideList = document.querySelector(".slide_list");
+const buttonPrev = document.querySelector(".button_box_prev");
+const buttonNext = document.querySelector(".button_box_next");
 const slideContents = document.querySelectorAll(".slide_content");
-const slideButtonPrev = document.querySelector(".slide_btn_prev");
-const slideButtonNext = document.querySelector(".slide_btn_next");
-const slidePagination = document.querySelector(".slide_pagination");
+const pagination = document.querySelector(".pagination");
 const slideLength = slideContents.length;
 const contentWidth = 400;
-const contentHeight = 400;
-const slideSpeed = 300;
+const contentSpeed = 300;
 const startNum = 1;
-const endNum = slideLength - 1
+const endNum = 5;
+const selectSlide = "slide_active"; 
+let pageDots;
 
-let curIndex  = 0;
-let curSlide = slideContents[curIndex]
+let curIndex = 0;
 
-slideList.style.width = contentWidth * (slideLength + 2) + "px";
-slideList.style.height = contentHeight + "px";
-
-function init() {
-    slideButtonPrev.addEventListener("click",clickButtonPrev);
-    slideButtonNext.addEventListener("click",clickButtonNext);
-    setPagination();
-}
+slideList.style.width = (slideLength + 2)*(contentWidth) + "px";
 
 const firstChild = slideList.firstElementChild;
 const lastChild = slideList.lastElementChild;
 const clonedFirst = firstChild.cloneNode(true);
-const clonedLast = lastChild.cloneNode(true);
+const clonedlast = lastChild.cloneNode(true);
 
 slideList.appendChild(clonedFirst);
-slideList.insertBefore(clonedLast,firstChild)
+slideList.insertBefore(clonedlast,slideList.firstElementChild);
 
-slideList.style.transform = "translatex(-" + startNum * contentWidth + "px)";
+slideList.style.transform = "translateX(-" + contentWidth * startNum + "px)";
 
-curSlide.classList.add("active_list");
+slideContents[curIndex].classList.add(selectSlide);
 
-function clickButtonPrev() {
-    if (curIndex  > 0) {
-        slideList.style.transition = slideSpeed + "ms";
-        slideList.style.transform = "translatex(-" + (curIndex)* contentWidth + "px)";
-        --curIndex ;
-    } else {
-        slideList.style.transition = slideSpeed + "ms";
-        slideList.style.transform = "translatex(0px)";
-        setTimeout(function(){
-            slideList.style.transition = "0ms";
-            slideList.style.transform = "translatex(-" + contentWidth*(endNum + 1) + "px";
-        },slideSpeed)
-        curIndex = endNum;
-    }
+function init() {
+    buttonNext.addEventListener("click",clickButtonNext);
+    buttonPrev.addEventListener("click",clickButtonPrev);
+    paginationInitializer();
+    pageDots = document.querySelectorAll(".dot");
+    pageDots.forEach(function(dot){
+        dot.addEventListener("click",function(event){
+        const selectIdx = Number(this.getAttribute('data-index'));
+        if (curIndex !== selectIdx) {
+        slideContents[curIndex].classList.remove("slide_active");
+        slideContents[selectIdx].classList.add("slide_active");
+        pageDots[curIndex].classList.remove("dot_active");
+        pageDots[selectIdx].classList.add("dot_active");
+        curIndex = selectIdx;
+        slideList.style.transform = "translateX(-" + contentWidth * (parseInt(selectIdx) + 1) + "px)";
+        slideList.style.transition = contentSpeed + "ms";   
+        }
+        });
+    });
 }
+
 
 function clickButtonNext() {
-    if (curIndex  < endNum) {
-        slideList.style.transition = slideSpeed + "ms";
-        slideList.style.transform = "translatex(-" + (curIndex + 2)* contentWidth + "px)";
-        curSlide.classList.remove("active_list");
-        curSlide = slideContents[curIndex + 1];
-        ++curIndex;
+    slideContents[curIndex].classList.remove(selectSlide);
+    pageDots[curIndex].classList.remove("dot_active")
+    if(curIndex < slideLength - 1) {
+        slideList.style.transform = "translateX(-" + contentWidth * (curIndex + 2) + "px)";
+        slideList.style.transition = contentSpeed + "ms";
+        curIndex++;
     } else {
-        slideList.style.transition = slideSpeed + "ms";
-        slideList.style.transform = "translatex(-" + (curIndex  + 2)* contentWidth + "px)";
+        slideList.style.transform = "translateX(-" + contentWidth * (endNum +1) + "px)";
+        slideList.style.transition = contentSpeed + "ms";
         setTimeout(function(){
-            slideList.style.transition = "0ms";
-            slideList.style.transform = "translatex(-" + contentWidth * startNum + "px";
-        },slideSpeed);
-        curSlide.classList.remove("active_list");
-        curIndex = 0;
-        curSlide = slideContents[curIndex];
+            slideList.style.transition = 0 + "ms";
+            slideList.style.transform = "translateX(-" + contentWidth * (startNum) + "px)";
+        },contentSpeed)
+        curIndex = startNum - 1
     }
-    curSlide.classList.add("active_list");
+    slideContents[curIndex].classList.add(selectSlide);
+    pageDots[curIndex].classList.add("dot_active")
 }
 
-function setPagination() {
-    let pageChild = '';
-    for (var i = 1 ; i <= slideLength ; i++) {
-        pageChild += '<li class="dot';
-        pageChild += (i === startNum) ? ' dot_active' : '';
-        pageChild += '" data-index="' + i + '"><a href="#"></a></li>';
+function clickButtonPrev(){
+    slideContents[curIndex].classList.remove(selectSlide);
+    pageDots[curIndex].classList.remove("dot_active")
+    if(curIndex > 0 ) {
+        slideList.style.transform = "translateX(-" + contentWidth * (curIndex) + "px)";
+        slideList.style.transition = contentSpeed + "ms";
+        curIndex--;
+    } else {
+        slideList.style.transform = "translateX(-" + contentWidth * (startNum - 1) + "px)";
+        slideList.style.transition = contentSpeed + "ms";
+        setTimeout(function(){
+            slideList.style.transition = 0 + "ms";
+            slideList.style.transform = "translateX(-" + contentWidth * (endNum) + "px)";
+        },contentSpeed)
+        curIndex = endNum - 1;
     }
-    slidePagination.innerHTML = pageChild;
-    const pageDots = document.querySelectorAll('.dot');
+    slideContents[curIndex].classList.add(selectSlide);
+    pageDots[curIndex].classList.add("dot_active")
+}
+
+function paginationInitializer() {
+    for (let i = 0 ; i < slideLength ; i++ ) {
+        li = document.createElement("li");
+        a = document.createElement("a");
+        a.setAttribute("href","#");
+        li.classList.add("dot");
+        if (i === startNum - 1) {
+            li.classList.add("dot_active");
+        }
+        li.setAttribute("data-index",i);
+        li.appendChild(a);
+        pagination.appendChild(li);
+    }
 }
 
 init();

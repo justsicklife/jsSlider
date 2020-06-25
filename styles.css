@@ -1,101 +1,91 @@
-html, body {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+body,html {
+    box-sizing: border-box; margin: 0; padding: 0;
+    color: white;
+    background-color: black;
     text-align: center;
 }
-
 #container {
     width: 1000px;
     margin: auto;
 }
 .slide_wrap {
     width: 400px;
-    margin: inherit;
+    margin: auto;
     position: relative;
-}
-.slide_content {
-    display: table;
-    float: left;
-    width: 400px;
-    height: 400px;
+    padding-bottom: 30px;
 }
 .slide_box {
     width: 100%;
     overflow-x: hidden;
     margin: auto;
 }
+
+.slide_content {
+    display: table;
+    width: 400px;
+    height: 400px;
+    float: left;
+}
+
+.slide_content > p {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 100px;
+    font-weight: bold;
+}
+
 .clearflx::after {
     content: '';
     clear: both;
     float: none;
 }
-.slide_content > p {
-    display: table-cell;
-    font-size: 100px;
-    vertical-align: middle;
-    text-align: center;
+
+.content01 {
+    background-color: rgb(174, 212, 136);
 }
-.slide01 {
-    background: rgb(155, 206, 184);
+.content02 {
+    background-color: rgb(136, 156, 212);
 }
-.slide02 {
-    background: rgb(137, 135, 209);
+.content03 {
+    background-color: rgb(212, 136, 195);
 }
-.slide03 {
-    background: rgb(156, 216, 138);
+.content04 {
+    background-color: rgb(212, 194, 136);
 }
-.slide04 {
-    background: rgb(216, 214, 139);
+.content05 {
+    background-color: rgb(136, 212, 165);
 }
-.slide05 {
-    background: rgb(226, 172, 147);
-}
-.slide_btn_box {
+
+.button_box > button{
     position: absolute;
     top: 50%;
-    left: 50%;
-    margin-top: -25px;
+    margin-top: -30px; 
+    width: 70px;
+    height: 70px;
+    border-radius: 5px;
 }
-.slide_btn_box > button {
-    width: 60px;
-    height: 60px;
-    background: none;
-    border: rgb(146, 146, 146) 1px solid;
-    position: inherit;
+.button_box .button_box_prev {
+    left: -120px;
 }
-.slide_btn_prev {
-    left: -300px;
-}
-.slide_btn_next {
-    right: -300px;
-}
-.slide_pagination { 
-    position: absolute; 
-    left: 50%; 
-    bottom: -30px; 
-    list-style: none; 
-    margin: 0; 
-    padding: 0; 
-    transform: translateX(-50%); 
-}
-.slide_pagination .dot { 
-    display: inline-block; 
-    width: 15px; 
-    height: 15px; 
-    margin: 0 7px; 
-    overflow: hidden; 
-    background: #ddd; 
-    border-radius: 50%; 
-    transition: 0.3s;
+.button_box .button_box_next {
+    right: -120px;
 }
 
-.slide_pagination .dot.dot_active {
-    background: #333; 
+.pagination {
+    position: absolute;
+    left: 60px;
 }
 
-.slide_pagination .dot a { 
-    display: block; 
-    width: 100%; 
-    height: 100%; 
+.pagination .dot{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(226, 226, 226);  
+    border-radius: 15px;  
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.pagination .dot_active{
+    background-color: rgb(128, 128, 128);
 }
